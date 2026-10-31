@@ -125,7 +125,7 @@ jobs:
 
       - name: Validate STOCK_DEVICE - ${{ inputs.STOCK_DEVICE }}
         run: |
-          REPO="SN-Abdullah-Al-Noman/QuantumROM"
+          REPO="LagTech123/QuantumROM"
           BRANCH="Devices"
 
           source "$(pwd)/scripts/git_utils.sh"
@@ -139,7 +139,7 @@ jobs:
               fi
 
               echo "✅ Device supported: $STOCK_DEVICE"
-              GIT_SPARSE_DOWNLOAD "SN-Abdullah-Al-Noman/QuantumROM" "Devices" "$STOCK_DEVICE" \
+              GIT_SPARSE_DOWNLOAD "LagTech123/QuantumROM" "Devices" "$STOCK_DEVICE" \
                   "$(pwd)/QuantumROM/Devices/$STOCK_DEVICE"
           else
               echo "ℹ️ STOCK_DEVICE is set to None."
@@ -167,7 +167,7 @@ jobs:
           sudo apt install -y p7zip-full lz4 liblz4-1 liblz4-dev libzstd1 libzstd-dev build-essential android-sdk-libsparse-utils linux-modules-extra-$(uname -r) \
               f2fs-tools fuse2fs fuse e2fsprogs python3 python3-pip zipalign unzip openjdk-21-jdk jq perl xxd kmod erofs-utils curl wget curl wget brotli pv
           sudo modprobe f2fs || true
-          git clone https://github.com/SN-Abdullah-Al-Noman/GoFileDownloader.git
+          git clone https://github.com/LagTech123/GoFileDownloader.git
           cd GoFileDownloader
           pip install -r requirements.txt
           mkdir -p "$FIRM_DIR" "$OUT_DIR" "$WORK_DIR"
