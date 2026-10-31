@@ -67,11 +67,6 @@ on:
         required: true
         default: "True"
 
-      PATCH_SECURE_FOLDER:
-        description: "Patch samsung secure folder (True/False)"
-        required: true
-        default: "True"
-
       PATCH_BLUETOOTH_LIBRARY:
         description: "Patch bluetooth library (True/False)"
         required: true
@@ -116,8 +111,6 @@ jobs:
           echo "ADD_CHINA_SMART_MANAGER=${{ inputs.ADD_CHINA_SMART_MANAGER }}" | tee -a "$GITHUB_ENV"
           echo "ADD_SAMSUNG_FLAGSHIP_APPS=${{ inputs.ADD_SAMSUNG_FLAGSHIP_APPS }}" | tee -a "$GITHUB_ENV"
           echo "ADD_CUSTOM_FEATURES=${{ inputs.ADD_CUSTOM_FEATURES }}" | tee -a "$GITHUB_ENV"
-          echo "PATCH_FLAG_SECURE=${{ inputs.PATCH_FLAG_SECURE }}" | tee -a "$GITHUB_ENV"
-          echo "PATCH_SECURE_FOLDER=${{ inputs.PATCH_SECURE_FOLDER }}" | tee -a "$GITHUB_ENV"
           echo "PATCH_BLUETOOTH_LIBRARY=${{ inputs.PATCH_BLUETOOTH_LIBRARY }}" | tee -a "$GITHUB_ENV"
 
           echo "OUTPUT_FILESYSTEM=${{ inputs.OUTPUT_FILESYSTEM }}" | tee -a "$GITHUB_ENV"
@@ -255,40 +248,6 @@ jobs:
 
           if [ "$ADD_CUSTOM_FEATURES" = "True" ]; then
               APPLY_CUSTOM_FEATURES "$FIRM_DIR"
-          fi
-
-      - name: Patch flag secure and secure folder - ${{ inputs.PATCH_FLAG_SECURE }} - ${{ inputs.PATCH_SECURE_FOLDER }}
-        run: |
-          source "$(pwd)/scripts/QuantumRom.sh"
-
-          if [ "$PATCH_FLAG_SECURE" = "True" ] || [ "$PATCH_SECURE_FOLDER" = "True" ] || [ "$ADD_CHINA_SMART_MANAGER" = "True" ] || [ "$ADD_SAMSUNG_FLAGSHIP_APPS" = "True" ]; then
-              INSTALL_FRAMEWORK "$APKTOOL" "$FIRM_DIR/system/system/framework/framework-res.apk"
-              DECOMPILE "$APKTOOL" "$FIRM_DIR/system/system/framework" "$FIRM_DIR/system/system/framework/services.jar" "$WORK_DIR"
-          fi
-
-          if [ "$PATCH_FLAG_SECURE" = "True" ]; then
-              PATCH_FLAG_SECURE "$FIRM_DIR" "$WORK_DIR/services"
-          fi
-
-          if [ "$PATCH_SECURE_FOLDER" = "True" ]; then
-              PATCH_SECURE_FOLDER "$FIRM_DIR" "$WORK_DIR/services"
-          fi
-
-          if [ "$ADD_CHINA_SMART_MANAGER" = "True" ] || [ "$ADD_SAMSUNG_FLAGSHIP_APPS" = "True" ]; then
-              PATCH_APK_SHARED_USER_ID_VERIFICATION "$FIRM_DIR" "$WORK_DIR/services"
-          fi
-
-          if [ -f "$WORK_DIR/services.jar" ]; then
-              mv -f "$WORK_DIR/services.jar" "$FIRM_DIR/system/system/framework/"
-              echo "✅ services.jar moved to rom."
-          fi
-
-      - name: Patch bluetooth library- ${{ inputs.PATCH_BLUETOOTH_LIBRARY }}
-        run: |
-          source "$(pwd)/scripts/QuantumRom.sh"
-
-          if [ "$PATCH_BLUETOOTH_LIBRARY" = "True" ]; then
-              PATCH_BT_LIB "$FIRM_DIR" "$WORK_DIR"
           fi
 
       - name: Apply others features and patch
